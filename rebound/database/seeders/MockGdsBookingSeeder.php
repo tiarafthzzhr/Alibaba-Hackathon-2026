@@ -68,7 +68,7 @@ class MockGdsBookingSeeder extends Seeder
                 'to_code' => 'KUL',
                 'departure_time' => '2026-09-01 11:15:00',
                 'cabin_class' => 'Economy',
-                'status' => 'on_time',
+                'status' => 'delayed',
             ],
             [
                 'pnr_code' => 'JT028',
