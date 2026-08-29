@@ -56,7 +56,7 @@ class MockGdsBookingSeeder extends Seeder
                 'to_code' => 'SIN',
                 'departure_time' => '2026-09-20 08:25:00',
                 'cabin_class' => 'Economy',
-                'status' => 'flown',
+                'status' => 'delayed',
             ],
             // id: Tiket tambahan yang tampil di sidebar
             // en: Extra tickets shown in the sidebar
