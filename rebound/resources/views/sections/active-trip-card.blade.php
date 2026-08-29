@@ -72,21 +72,23 @@
         <!-- Airline & Flight No -->
         <div class="flex items-center gap-2">
             <span class="font-medium text-slate-800 text-[10.5px]"
-                  x-text="flightStatus === 'rebooked' ? (flight.alternative.flightNumber + ' • ' + flight.alternative.airline) : ((flight.original.flightNumber || selectedTicketId) + ' • ' + (flight.original.airline || 'Garuda Indonesia'))"></span>
+                  x-text="flightStatus === 'rebooked' ? (flight.alternative.flightNumber + ' • ' + flight.alternative.airline) : ((flight.original.flightNumber || selectedTicketId) + ' • ' + (flight.original.airline || '-'))"></span>
         </div>
 
         <!-- Schedule / Delay details -->
         <div class="text-right">
             <!-- Normal Time -->
             <template x-if="flightStatus === 'on-time' || flightStatus === 'on_time' || flightStatus === 'active'">
+                {{-- id: Fallback tanggal berantai dari data backend (dateFullId/date), bukan placeholder Figma '30 Nov'.
+                     en: Date fallback chain from backend data (dateFullId/date), not the '30 Nov' Figma placeholder. --}}
                 <span class="font-semibold text-slate-800 text-[11px]"
-                      x-text="lang === 'id' ? (flight.original.dateFullId || '30 November, 09.30') : (flight.original.dateFullEn || '30 Nov, 09:30 AM')"></span>
+                      x-text="lang === 'id' ? (flight.original.dateFullId || flight.original.date || '-') : (flight.original.dateFullEn || flight.original.date || '-')"></span>
             </template>
 
             <!-- Delayed Time & Reason (Node 14:729, 14:656) -->
             <template x-if="flightStatus === 'delayed'">
                 <div>
-                    <div class="font-bold text-slate-900 text-[11px]" x-text="flight.original.delayTime || '30 Nov, 09.30 PM'"></div>
+                    <div class="font-bold text-slate-900 text-[11px]" x-text="flight.original.delayTime || flight.original.dateFullId || '-'"></div>
                     <div class="text-[10px] text-amber-600 font-medium flex items-center justify-end gap-1 mt-0.5">
                         <i class="fa-solid fa-cloud-bolt text-[9px]"></i>
                         <span x-text="lang === 'id' ? 'Penyebab: ' + (flight.original.delayCauseId || 'Cuaca buruk') : 'Cause: ' + (flight.original.delayCauseEn || 'Bad weather')"></span>

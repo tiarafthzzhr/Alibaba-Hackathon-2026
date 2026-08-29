@@ -299,30 +299,37 @@
                 get activeFlight() {
                     const rebooked = this.flightStatus === 'rebooked';
                     const f = rebooked ? this.flight.alternative : this.flight.original;
+                    // id: Fallback berbasis data — jika field penerbangan aktif kosong (mis. rebooked tanpa
+                    //     gate/kursi), ambil dari profil penerbangan asli; sisa kosong tampil '-' supaya
+                    //     tidak ada lagi tanggal/kota fiktif (bug lama: '30 Nov', '09:30', '14A').
+                    // en: Data-driven fallbacks — when the displayed flight lacks a field (e.g. a rebooked
+                    //     flight without gate/seat), borrow it from the original flight profile; anything
+                    //     still empty renders '-' so no fictitious dates/cities remain (old bug: '30 Nov', '09:30', '14A').
+                    const o = this.flight.original || {};
                     return {
-                        flightNumber: f.flightNumber || this.selectedTicketId || 'GA826',
-                        airline: f.airline || 'Garuda Indonesia',
-                        airlineCode: f.airlineCode || 'GA',
-                        aircraft: f.aircraft || (rebooked ? 'Boeing 737-800' : 'Airbus A330-300'),
-                        gate: f.gate || (rebooked ? '4A' : '3B'),
-                        depTime: f.depTime || '09:30',
-                        arrTime: f.arrTime || '12:20',
+                        flightNumber: f.flightNumber || o.flightNumber || this.selectedTicketId || '-',
+                        airline: f.airline || o.airline || '-',
+                        airlineCode: f.airlineCode || o.airlineCode || '-',
+                        aircraft: f.aircraft || o.aircraft || '-',
+                        gate: f.gate || o.gate || '-',
+                        depTime: f.depTime || o.depTime || '-',
+                        arrTime: f.arrTime || o.arrTime || '-',
                         // id: Waktu boarding = 40 menit sebelum keberangkatan (standar tampilan aplikasi)
                         // en: Boarding time = 40 minutes before departure (app display standard)
-                        boardingTime: this.min40(f.depTime || '09:30'),
-                        date: f.date || '30 Nov',
-                        class: f.class || 'Economy (V)',
-                        duration: f.duration || '2j 45m',
-                        durationEn: f.durationEn || '1h 45m',
-                        fromCode: f.fromCode || 'CGK',
-                        toCode: f.toCode || 'SIN',
-                        fromCity: f.fromCity || 'Jakarta',
-                        toCity: f.toCity || 'Singapura',
-                        toCityEn: f.toCityEn || 'Singapore',
-                        terminal: f.terminal || '3',
-                        seat: f.seat || '14A',
-                        zone: f.boardingGroup || '2',
-                        pnr: this.selectedTicketId || 'GA826',
+                        boardingTime: (f.depTime || o.depTime) ? this.min40(f.depTime || o.depTime) : '-',
+                        date: f.date || o.date || '-',
+                        class: f.class || o.class || '-',
+                        duration: f.duration || o.duration || '-',
+                        durationEn: f.durationEn || o.durationEn || '-',
+                        fromCode: f.fromCode || o.fromCode || '-',
+                        toCode: f.toCode || o.toCode || '-',
+                        fromCity: f.fromCity || o.fromCity || '-',
+                        toCity: f.toCity || o.toCity || '-',
+                        toCityEn: f.toCityEn || o.toCityEn || f.toCity || o.toCity || '-',
+                        terminal: f.terminal || o.terminal || '-',
+                        seat: f.seat || o.seat || '-',
+                        zone: f.boardingGroup || o.boardingGroup || '-',
+                        pnr: this.selectedTicketId || '-',
                     };
                 },
 
