@@ -422,8 +422,40 @@
                 // id: Daftar penerbangan alternatif kini dipasok dari backend per PNR aktif, bukan hardcode di Alpine.
                 // en: Alternative flight inventory is now supplied by backend per active PNR, not hardcoded in Alpine.
                 alternativeFlightsByPnr: @json($alternativeFlightsByPnr ?? []),
+                alternativeFlightsSourceByPnr: {},
                 get alternativeFlightsList() {
                     return this.alternativeFlightsByPnr?.[this.selectedTicketId] || [];
+                },
+                get alternativeFlightsSource() {
+                    return this.alternativeFlightsSourceByPnr?.[this.selectedTicketId] || 'rebound_demo_fallback';
+                },
+
+                async loadAlternativeFlights(pnrCode, flight) {
+                    if (!pnrCode || !flight || this.alternativeFlightsSourceByPnr?.[pnrCode]) return;
+
+                    const from = flight.fromCode;
+                    const to = flight.toCode;
+                    if (!from || !to) return;
+
+                    try {
+                        const response = await fetch(`/api/flights/alternatives?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`, {
+                            headers: { 'Accept': 'application/json' }
+                        });
+                        const payload = await response.json();
+
+                        if (response.ok && payload.status === 'success' && Array.isArray(payload.data)) {
+                            this.alternativeFlightsByPnr = {
+                                ...this.alternativeFlightsByPnr,
+                                [pnrCode]: payload.data,
+                            };
+                            this.alternativeFlightsSourceByPnr = {
+                                ...this.alternativeFlightsSourceByPnr,
+                                [pnrCode]: payload.source || 'rebound_demo_fallback',
+                            };
+                        }
+                    } catch (error) {
+                        // Server-rendered demo inventory remains visible if the request fails.
+                    }
                 },
 
                 // id: Saran prompt lapis 1 dari backend (rule-based per PNR) + cache saran lapis 2 dari Qwen
@@ -587,6 +619,7 @@
 
                         this.loadChatHistory();
                         this.refreshAiSuggestions(id);
+                        this.loadAlternativeFlights(id, backendProfile.original);
                         return;
                     }
 
@@ -608,6 +641,7 @@
                                 showRecommendation: true,
                             }
                         ];
+                        this.loadAlternativeFlights(id, this.flight.original);
                         // id: Case SQ951 — Tiket Singapore Airlines Business Class (on-time). Data hardcode harus dari API /api/bookings/SQ951
                         // en: Case SQ951 — Singapore Airlines Business Class ticket (on-time). Hardcoded data must be from API /api/bookings/SQ951
                     } else if (id === 'SQ951') {

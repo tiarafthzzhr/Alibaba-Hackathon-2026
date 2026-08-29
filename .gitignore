@@ -28,3 +28,4 @@ Thumbs.db
 
 # Bailian/Qwen API key exports (contains secrets)
 Default Workspace-apiKey-*.csv
+command-install.txt

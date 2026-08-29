@@ -67,7 +67,8 @@ In backend: fetch from endpoint GET /api/flights/alternatives?route=CGK-SIN&date
                                         x-text="'(' + altFlight.flightNumber + ')'"></span>
                                 </div>
                                 <div class="text-[10px] text-slate-400 font-medium"
-                                    x-text="altFlight.aircraft + ' • Gate ' + altFlight.gate"></div>
+                                    x-show="altFlight.aircraft || altFlight.gate"
+                                    x-text="[altFlight.aircraft, altFlight.gate ? 'Gate ' + altFlight.gate : null].filter(Boolean).join(' • ')"></div>
                             </div>
                         </div>
 
@@ -75,7 +76,7 @@ In backend: fetch from endpoint GET /api/flights/alternatives?route=CGK-SIN&date
                             <span x-show="altFlight.isRecommended"
                                 class="px-2 py-0.5 bg-blue-100 text-brand-700 text-[9.5px] font-bold uppercase rounded"
                                 x-text="lang === 'id' ? 'Rekomendasi' : 'Recommended'"></span>
-                            <span x-show="!altFlight.isRecommended"
+                            <span x-show="!altFlight.isRecommended && altFlight.seatsAvailable != null"
                                 class="px-2 py-0.5 bg-slate-100 text-slate-600 text-[9.5px] font-bold rounded"
                                 x-text="altFlight.seatsAvailable + ' ' + (lang === 'id' ? 'Kursi' : 'Seats')"></span>
                         </div>
@@ -142,7 +143,9 @@ In backend: fetch from endpoint GET /api/flights/alternatives?route=CGK-SIN&date
             <span class="text-[10.5px] text-slate-400">
                 <i class="fa-solid fa-database text-slate-400 mr-1"></i>
                 <span
-                    x-text="lang === 'id' ? 'Sinkronisasi GDS Atlas: ' + alternativeFlightsList.length + ' Penerbangan Aktif' : 'GDS Atlas Synced: ' + alternativeFlightsList.length + ' Active Flights'"></span>
+                    x-text="alternativeFlightsSource === 'atlas_sandbox'
+                        ? (lang === 'id' ? 'Atlas Sandbox: ' + alternativeFlightsList.length + ' Penerbangan Ditemukan' : 'Atlas Sandbox: ' + alternativeFlightsList.length + ' Flights Found')
+                        : (lang === 'id' ? 'Inventaris Demo Rebound: ' + alternativeFlightsList.length + ' Penerbangan' : 'Rebound Demo Inventory: ' + alternativeFlightsList.length + ' Flights')"></span>
             </span>
             <button @click="showFlightOptionsModal = false"
                 class="text-xs font-semibold text-slate-600 hover:text-slate-900 cursor-pointer"

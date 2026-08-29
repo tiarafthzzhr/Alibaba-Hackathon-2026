@@ -30,6 +30,15 @@ return [
         'model' => env('QWEN_MODEL_NAME', 'qwen-max'),
     ],
 
+    // Atlas ATRIP is used only for sandbox flight-search integration. Booking,
+    // payment, and ticketing are intentionally not called by this application.
+    'atlas' => [
+        'enabled' => env('ATLAS_SANDBOX_ENABLED', false),
+        'base_url' => env('ATLAS_BASE_URL', 'https://sandbox.atriptech.com'),
+        'access_key' => env('ATLAS_ACCESS_KEY'),
+        'secret_key' => env('ATLAS_SECRET_KEY'),
+    ],
+
     'ses' => [
         'key' => env('AWS_ACCESS_KEY_ID'),
         'secret' => env('AWS_SECRET_ACCESS_KEY'),

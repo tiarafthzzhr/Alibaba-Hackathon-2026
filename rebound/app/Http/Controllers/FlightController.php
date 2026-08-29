@@ -8,9 +8,40 @@ use App\Models\MockGdsBooking;
 use App\Models\Notification;
 use App\Models\Rebooking;
 use App\Models\UserPnr;
+use App\Services\AtlasSandboxFlightSearch;
+use Carbon\Carbon;
 
 class FlightController extends Controller
 {
+    /**
+     * Returns alternatives from Atlas ATRIP Sandbox when configured. The local
+     * demo inventory remains a safe fallback for unsupported sandbox routes.
+     */
+    public function alternatives(Request $request, AtlasSandboxFlightSearch $atlas): \Illuminate\Http\JsonResponse
+    {
+        $request->validate([
+            'from' => 'nullable|string|size:3|alpha',
+            'to' => 'nullable|string|size:3|alpha',
+            'date' => 'nullable|date_format:Y-m-d',
+        ]);
+
+        $from = strtoupper($request->query('from', 'CGK'));
+        $to = strtoupper($request->query('to', 'SIN'));
+        $date = Carbon::parse($request->query('date', now()->addDay()->toDateString()));
+        $atlasResult = $atlas->search($from, $to, $date);
+        $flights = $atlasResult['available'] ? $atlasResult['flights'] : $this->demoAlternatives($from, $to);
+
+        return response()->json([
+            'status' => 'success',
+            'route' => "{$from} -> {$to}",
+            'date' => $date->toDateString(),
+            'source' => $atlasResult['available'] ? 'atlas_sandbox' : 'rebound_demo_fallback',
+            'is_sandbox' => true,
+            'count' => count($flights),
+            'data' => $flights,
+        ]);
+    }
+
     public function lookup(Request $request)
     {
         // 1. Validasi Input Frontend
@@ -335,6 +366,40 @@ class FlightController extends Controller
             'departure_time' => $booking->departure_time?->toIso8601String(),
             'cabin_class' => $booking->cabin_class,
             'status' => $booking->status,
+        ];
+    }
+
+    private function demoAlternatives(string $from, string $to): array
+    {
+        return [
+            [
+                'flightNumber' => 'GA830', 'airline' => 'Garuda Indonesia', 'airlineCode' => 'GA',
+                'aircraft' => 'Boeing 737-800', 'gate' => '4A', 'fromCode' => $from, 'toCode' => $to,
+                'depTime' => '12:40', 'arrTime' => '15:25', 'duration' => '2j 45m', 'seatsAvailable' => 12,
+                'waiverStatus' => 'Eligible (Waiver 72A)', 'feeAmount' => 0, 'isRecommended' => true,
+                'source' => 'rebound_demo_fallback',
+            ],
+            [
+                'flightNumber' => 'SQ638', 'airline' => 'Singapore Airlines', 'airlineCode' => 'SQ',
+                'aircraft' => 'Airbus A350-900', 'gate' => '2A', 'fromCode' => $from, 'toCode' => $to,
+                'depTime' => '14:15', 'arrTime' => '17:05', 'duration' => '2j 50m', 'seatsAvailable' => 8,
+                'waiverStatus' => 'Eligible (Waiver 72A)', 'feeAmount' => 0, 'isRecommended' => false,
+                'source' => 'rebound_demo_fallback',
+            ],
+            [
+                'flightNumber' => 'QG524', 'airline' => 'Citilink (Garuda Group)', 'airlineCode' => 'QG',
+                'aircraft' => 'Airbus A320neo', 'gate' => '5B', 'fromCode' => $from, 'toCode' => $to,
+                'depTime' => '16:30', 'arrTime' => '19:15', 'duration' => '2j 45m', 'seatsAvailable' => 15,
+                'waiverStatus' => 'Eligible (Waiver 72A)', 'feeAmount' => 0, 'isRecommended' => false,
+                'source' => 'rebound_demo_fallback',
+            ],
+            [
+                'flightNumber' => 'ID7153', 'airline' => 'Batik Air', 'airlineCode' => 'ID',
+                'aircraft' => 'Boeing 737-800', 'gate' => '1C', 'fromCode' => $from, 'toCode' => $to,
+                'depTime' => '18:00', 'arrTime' => '20:50', 'duration' => '2j 50m', 'seatsAvailable' => 6,
+                'waiverStatus' => 'Eligible (Waiver 72A)', 'feeAmount' => 0, 'isRecommended' => false,
+                'source' => 'rebound_demo_fallback',
+            ],
         ];
     }
 }
