@@ -74,7 +74,7 @@ The current implementation uses a clearly labelled **sandbox GDS dataset** and s
 - **Dynamic In-Chat Components**: Custom Blade partials for Boarding Passes, Flight Selection Cards, QR Vouchers, and Policy Rationale Badges.
 
 ### Development Platform
-- **Qoder**: Used by the team to accelerate Laravel backend implementation, including the PNR verification, persistent chat-session, and agent-workflow features.
+- **Qoder**: Used to accelerate Laravel backend implementation, including the PNR verification, persistent chat-session, and agent-workflow features.
 
 ---
 
