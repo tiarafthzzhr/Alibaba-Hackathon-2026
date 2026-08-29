@@ -725,15 +725,6 @@ For endpoint details, the database schema, and demo seed data, see [Architecture
 - [x] Authentication (email/password + Google Sign-In via Firebase)
 - [x] Database schema for PNRs, chat sessions, messages, action logs, and vouchers
 
-**In progress**
-
-- [ ] Define the tool schemas (JSON) and register them in Qoder
-- [ ] Implement the Integration Layer (Atlas API wrappers on Function Compute)
-- [ ] Wire `search_alternatives` end-to-end as the first live tool
-- [ ] Wire up the simulated disruption (delay) trigger
-- [ ] Prepare the initial data (seed PNRs) in the sandbox
-- [ ] End-to-end demo of both flows
-- [ ] Pitch deck & presentation
 
 **Next phase — beyond the hackathon scope**
 
@@ -741,17 +732,7 @@ For endpoint details, the database schema, and demo seed data, see [Architecture
 - [ ] **Alternate-airport awareness** — surface replacement flights that land at a different airport serving the same city (e.g. SZB instead of KUL), so a passenger is never silently rerouted.
 - [ ] **Pre-booking trip planning** — deliberately out of scope for now. Searching and buying new tickets is OTA territory, and Rebound's value comes from staying focused on the post-booking phase.
 
----
 
-## 👥 Team
-
-> _Add your team members here._
-
-| Name | Role |
-| :--- | :--- |
-| — | — |
-
----
 
 ## 📄 License
 
