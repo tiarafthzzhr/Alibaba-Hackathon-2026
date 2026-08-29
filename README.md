@@ -57,7 +57,6 @@
 - [Alignment with the UN SDGs](#-alignment-with-the-un-sdgs)
 - [Judging Criteria Mapping](#️-judging-criteria-mapping)
 - [Roadmap](#-roadmap)
-- [Team](#-team)
 - [License](#-license)
 
 ---
