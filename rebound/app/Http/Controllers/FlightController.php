@@ -371,35 +371,58 @@ class FlightController extends Controller
 
     private function demoAlternatives(string $from, string $to): array
     {
+        // id: Field kota & durasi EN wajib ikut agar modal dan kartu rebook tidak menampilkan "undefined"
+        //     saat inventaris demo ini menggantikan daftar hasil render server di frontend.
+        // en: City fields and EN duration must travel with the payload so the modal and rebook card
+        //     never render "undefined" when this demo inventory replaces the server-rendered list.
+        $fromCity = $this->demoCityName($from);
+        $toCity = $this->demoCityName($to);
+
         return [
             [
                 'flightNumber' => 'GA830', 'airline' => 'Garuda Indonesia', 'airlineCode' => 'GA',
                 'aircraft' => 'Boeing 737-800', 'gate' => '4A', 'fromCode' => $from, 'toCode' => $to,
-                'depTime' => '12:40', 'arrTime' => '15:25', 'duration' => '2j 45m', 'seatsAvailable' => 12,
+                'fromCity' => $fromCity, 'fromCityEn' => $fromCity, 'toCity' => $toCity, 'toCityEn' => $toCity,
+                'depTime' => '12:40', 'arrTime' => '15:25', 'duration' => '2j 45m', 'durationEn' => '2h 45m', 'seatsAvailable' => 12,
                 'waiverStatus' => 'Eligible (Waiver 72A)', 'feeAmount' => 0, 'isRecommended' => true,
                 'source' => 'rebound_demo_fallback',
             ],
             [
                 'flightNumber' => 'SQ638', 'airline' => 'Singapore Airlines', 'airlineCode' => 'SQ',
                 'aircraft' => 'Airbus A350-900', 'gate' => '2A', 'fromCode' => $from, 'toCode' => $to,
-                'depTime' => '14:15', 'arrTime' => '17:05', 'duration' => '2j 50m', 'seatsAvailable' => 8,
+                'fromCity' => $fromCity, 'fromCityEn' => $fromCity, 'toCity' => $toCity, 'toCityEn' => $toCity,
+                'depTime' => '14:15', 'arrTime' => '17:05', 'duration' => '2j 50m', 'durationEn' => '2h 50m', 'seatsAvailable' => 8,
                 'waiverStatus' => 'Eligible (Waiver 72A)', 'feeAmount' => 0, 'isRecommended' => false,
                 'source' => 'rebound_demo_fallback',
             ],
             [
                 'flightNumber' => 'QG524', 'airline' => 'Citilink (Garuda Group)', 'airlineCode' => 'QG',
                 'aircraft' => 'Airbus A320neo', 'gate' => '5B', 'fromCode' => $from, 'toCode' => $to,
-                'depTime' => '16:30', 'arrTime' => '19:15', 'duration' => '2j 45m', 'seatsAvailable' => 15,
+                'fromCity' => $fromCity, 'fromCityEn' => $fromCity, 'toCity' => $toCity, 'toCityEn' => $toCity,
+                'depTime' => '16:30', 'arrTime' => '19:15', 'duration' => '2j 45m', 'durationEn' => '2h 45m', 'seatsAvailable' => 15,
                 'waiverStatus' => 'Eligible (Waiver 72A)', 'feeAmount' => 0, 'isRecommended' => false,
                 'source' => 'rebound_demo_fallback',
             ],
             [
                 'flightNumber' => 'ID7153', 'airline' => 'Batik Air', 'airlineCode' => 'ID',
                 'aircraft' => 'Boeing 737-800', 'gate' => '1C', 'fromCode' => $from, 'toCode' => $to,
-                'depTime' => '18:00', 'arrTime' => '20:50', 'duration' => '2j 50m', 'seatsAvailable' => 6,
+                'fromCity' => $fromCity, 'fromCityEn' => $fromCity, 'toCity' => $toCity, 'toCityEn' => $toCity,
+                'depTime' => '18:00', 'arrTime' => '20:50', 'duration' => '2j 50m', 'durationEn' => '2h 50m', 'seatsAvailable' => 6,
                 'waiverStatus' => 'Eligible (Waiver 72A)', 'feeAmount' => 0, 'isRecommended' => false,
                 'source' => 'rebound_demo_fallback',
             ],
         ];
+    }
+
+    private function demoCityName(string $airport): string
+    {
+        return [
+            'CGK' => 'Jakarta',
+            'SIN' => 'Singapore',
+            'HND' => 'Tokyo',
+            'KUL' => 'Kuala Lumpur',
+            'DPS' => 'Denpasar',
+            'SUB' => 'Surabaya',
+        ][strtoupper($airport)] ?? strtoupper($airport);
     }
 }

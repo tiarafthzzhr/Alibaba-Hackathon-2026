@@ -310,8 +310,8 @@
                         flightNumber: f.flightNumber || o.flightNumber || this.selectedTicketId || '-',
                         airline: f.airline || o.airline || '-',
                         airlineCode: f.airlineCode || o.airlineCode || '-',
-                        aircraft: f.aircraft || o.aircraft || '-',
-                        gate: f.gate || o.gate || '-',
+                        aircraft: f.aircraft || (!rebooked && o.aircraft) || '-',
+                        gate: f.gate || (!rebooked && o.gate) || '-',
                         depTime: f.depTime || o.depTime || '-',
                         arrTime: f.arrTime || o.arrTime || '-',
                         // id: Waktu boarding = 40 menit sebelum keberangkatan (standar tampilan aplikasi)
@@ -914,10 +914,12 @@
                         arrTime: altFlight.arrTime,
                         duration: altFlight.duration,
                         durationEn: altFlight.durationEn,
-                        // id: Gate & tipe pesawat ikut dipindahkan agar overview/receipts menampilkan data maskapai baru
-                        // en: Gate & aircraft type are carried over so overview/receipts show the new airline data
-                        gate: altFlight.gate || '4A',
-                        aircraft: altFlight.aircraft || 'Boeing 737-800',
+                        // id: Gate & tipe pesawat ikut dipindahkan agar overview/receipts menampilkan data maskapai baru.
+                        //     Tanpa fallback fiktif — hasil Atlas Sandbox tidak mengirim gate, biarkan getter menampilkan '-'.
+                        // en: Gate & aircraft type are carried over so overview/receipts show the new airline data.
+                        //     No fictitious fallback — Atlas Sandbox results carry no gate, let the getter render '-'.
+                        gate: altFlight.gate || null,
+                        aircraft: altFlight.aircraft || null,
                         departureCountdownId: 'Berangkat ' + altFlight.depTime + ' WIB',
                         departureCountdownEn: 'Departs at ' + altFlight.depTime,
                     };
