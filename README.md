@@ -731,7 +731,7 @@ For endpoint details, the database schema, and demo seed data, see [Architecture
 - [ ] **Alternate-airport awareness** — surface replacement flights that land at a different airport serving the same city (e.g. SZB instead of KUL), so a passenger is never silently rerouted.
 - [ ] **Pre-booking trip planning** — deliberately out of scope for now. Searching and buying new tickets is OTA territory, and Rebound's value comes from staying focused on the post-booking phase.
 
-
+#hackhaton #alibaba
 
 ## 📄 License
 
@@ -744,5 +744,5 @@ This project is released under the **MIT License**. See [`LICENSE`](LICENSE) for
 *Built for the Alibaba Cloud × Atlas Agentic AI Hackathon.*
 
 **Rebound — when plans change, let the agent handle the rest.**
-#hackhaton #alibaba
+
 </div>
