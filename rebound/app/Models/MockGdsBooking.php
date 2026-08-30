@@ -23,6 +23,11 @@ class MockGdsBooking extends Model
         'to_code',
         'departure_time',
         'cabin_class',
+        'aircraft',
+        'seat_number',
+        'boarding_zone',
+        'gate',
+        'terminal',
         'status',
     ];
 

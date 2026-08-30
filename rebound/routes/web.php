@@ -211,6 +211,13 @@ Route::middleware('auth')->group(function () {
             $departure = $booking->departure_time;
             $departureDateId = $departure?->format('d M Y, H.i') ?? '';
             $departureDateEn = $departure?->format('d M Y, H:i') ?? '';
+            // id: arrTime di bawah = keberangkatan + 2j 45m, jadi durasi dihitung dari nilai yang sama
+            //     agar kartu trip selalu konsisten dengan jam tiba yang ditampilkan.
+            // en: arrTime below = departure + 2h 45m, so duration is derived from the same value
+            //     to keep the trip card consistent with the displayed arrival time.
+            $durationMinutes = 165;
+            $durationId = intdiv($durationMinutes, 60) . 'j ' . ($durationMinutes % 60) . 'm';
+            $durationEn = intdiv($durationMinutes, 60) . 'h ' . ($durationMinutes % 60) . 'm';
 
             return [
                 'original' => [
@@ -218,6 +225,7 @@ Route::middleware('auth')->group(function () {
                     'airline' => $airlineFromFlightNumber($booking->flight_number),
                     'airlineCode' => strtoupper(substr((string) $booking->flight_number, 0, 2)),
                     'fromCity' => $fromCityId,
+                    'fromCityEn' => $fromCityEn,
                     'fromCode' => $booking->from_code,
                     'toCity' => $toCityId,
                     'toCityEn' => $toCityEn,
@@ -227,7 +235,13 @@ Route::middleware('auth')->group(function () {
                     'dateFullEn' => $departureDateEn,
                     'depTime' => $departure?->format('H:i') ?? '',
                     'arrTime' => $departure?->addHours(2)->addMinutes(45)?->format('H:i') ?? '',
-                    'aircraft' => 'TBA',
+                    'duration' => $durationId,
+                    'durationEn' => $durationEn,
+                    'aircraft' => $booking->aircraft ?? 'TBA',
+                    'seat' => $booking->seat_number ?? '-',
+                    'boardingGroup' => $booking->boarding_zone ?? '-',
+                    'gate' => $booking->gate ?? '-',
+                    'terminal' => $booking->terminal ?? '-',
                     'class' => $booking->cabin_class,
                     'statusId' => $statusId,
                     'statusEn' => $statusEn,

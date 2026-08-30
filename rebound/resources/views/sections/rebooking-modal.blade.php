@@ -95,7 +95,7 @@
                     </div>
                     <div>
                         <div class="font-semibold" x-text="lang === 'id' ? 'Penerbitan Boarding Pass ' + flight.alternative.flightNumber : flight.alternative.flightNumber + ' Boarding Pass Issuance'"></div>
-                        <div class="text-[10px] text-slate-500" x-text="lang === 'id' ? 'Kursi ' + activeFlight.seat + ' • Gate ' + (flight.alternative.gate || '4A') : 'Seat ' + activeFlight.seat + ' • Gate ' + (flight.alternative.gate || '4A')"></div>
+                        <div class="text-[10px] text-slate-500" x-text="lang === 'id' ? 'Kursi ' + activeFlight.seat + ' • Gate ' + (flight.alternative.gate || '-') : 'Seat ' + activeFlight.seat + ' • Gate ' + (flight.alternative.gate || '-')"></div>
                     </div>
                 </div>
                 <span x-show="rebookStep > 3" class="text-[9px] font-bold text-emerald-700 uppercase bg-emerald-100 px-1.5 py-0.2 rounded">OK</span>
