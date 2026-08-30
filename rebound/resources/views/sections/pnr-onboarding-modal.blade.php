@@ -102,8 +102,16 @@
                          if (Array.isArray(chatSessions) && data.data.session && !chatSessions.some(s => s.pnr_code === pnrCode)) {
                              chatSessions.unshift(data.data.session);
                          }
-                         selectTicket(pnrCode);
+                         // id: flightProfiles/alternativeFlightsByPnr dirender server saat halaman dimuat, sehingga
+                         //     PNR yang baru diverifikasi belum punya profil lengkap bila hanya memanggil selectTicket()
+                         //     (gejalanya: seat/zone/gate/durasi tampil "-" sampai halaman di-refresh manual).
+                         //     Reload halaman agar server merender ulang seluruh props dengan PNR baru tersebut.
+                         // en: flightProfiles/alternativeFlightsByPnr are server-rendered at page load, so a freshly
+                         //     verified PNR has no complete profile if we only call selectTicket() (symptom: seat/zone/
+                         //     gate/duration show "-" until a manual refresh). Reload so the server re-renders every
+                         //     prop with the new PNR included.
                          showToast(lang === 'id' ? 'PNR valid menurut GDS Atlas! Tiket ' + pnrCode + ' aktif.' : 'PNR valid per GDS Atlas! Ticket ' + pnrCode + ' active.');
+                         setTimeout(() => window.location.reload(), 900);
                      } else {
                          // id: GDS Atlas menyatakan PNR tidak valid / tidak ditemukan
                          // en: The Atlas GDS declared the PNR invalid / not found
