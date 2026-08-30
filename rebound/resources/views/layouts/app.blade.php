@@ -825,16 +825,10 @@
                     .catch(() => {});
                 },
 
-                // id: setStatus(status) — Mengubah status penerbangan secara manual (untuk demo). Jika status 'rebooked', otomatis pindah ke tab jadwal.
-                // en: setStatus(status) — Manually changes flight status (for demo). If status is 'rebooked', automatically switches to schedule tab.
-                // #BACKEND id: Tidak perlu di produksi — status penerbangan akan otomatis diupdate dari GDS real-time polling/webhook
-                // #BACKEND en: Not needed in production — flight status will be auto-updated from GDS real-time polling/webhook
-                setStatus(status) {
-                    this.flightStatus = status;
-                    if (status === 'rebooked') {
-                        this.activeSidebarTab = 'schedule';
-                    }
-                },
+                // id: setStatus(status) dihapus — status penerbangan kini murni informasi dari GDS mock per PNR;
+                //     simulasi manual di navbar sudah tidak ada (lihat navbar.blade.php).
+                // en: setStatus(status) removed — flight status is now purely informational from the mock GDS per PNR;
+                //     the manual simulation in the navbar no longer exists (see navbar.blade.php).
 
                 // id: markAllNotificationsRead() — Menandai seluruh notifikasi sebagai sudah dibaca:
                 //     langsung di state lokal (badge lonceng hilang seketika) lalu dipersistenkan ke

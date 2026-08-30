@@ -41,36 +41,16 @@
     <!-- RIGHT: Actions, Scenario Controller & User Profile -->
     <div class="flex items-center gap-2 sm:gap-2.5">
         
-        <!-- Compact Scenario Simulation Pill (Dropdown for testing different flight states) -->
-        <div class="hidden xl:relative xl:block" x-data="{ openScenario: false }">
-            <button @click="openScenario = !openScenario"
-                    class="flex items-center gap-1.5 px-2.5 py-1 rounded-lg border text-[11px] font-semibold transition bg-slate-50 hover:bg-slate-100/80 border-slate-200 text-slate-700">
+        <!-- id: Pill status penerbangan — hanya informasi (read-only). Status bersumber dari GDS mock per PNR;
+             opsi simulasi manual dihapus karena bertentangan dengan alur data & bisa menampilkan state rebooked tanpa data penerbangan.
+             en: Flight status pill — informational only (read-only). Status comes from the mock GDS per PNR;
+             the manual simulation options were removed because they contradicted the data flow & could show a rebooked state without flight data. -->
+        <div class="hidden xl:block">
+            <div class="flex items-center gap-1.5 px-2.5 py-1 rounded-lg border text-[11px] font-semibold bg-slate-50 border-slate-200 text-slate-700"
+                 :title="lang === 'id' ? 'Status dari GDS' : 'Status from GDS'">
                 <span class="w-1.5 h-1.5 rounded-full" 
                       :class="flightStatus === 'on-time' ? 'bg-emerald-500' : (flightStatus === 'delayed' ? 'bg-amber-500' : 'bg-blue-500')"></span>
                 <span x-text="flightStatus === 'on-time' ? (lang === 'id' ? 'Tepat Waktu' : 'On Time') : (flightStatus === 'delayed' ? (lang === 'id' ? 'Terlambat (+4j)' : 'Delayed (+4h)') : (lang === 'id' ? 'Terjadwal Baru' : 'Rebooked'))"></span>
-                <i class="fa-solid fa-chevron-down text-[9px] text-slate-400 ml-0.5"></i>
-            </button>
-
-            <!-- Scenario Dropdown Menu -->
-            <div x-show="openScenario" 
-                 @click.away="openScenario = false" 
-                 x-cloak
-                 class="absolute right-0 mt-1.5 w-48 bg-white rounded-xl shadow-floating border border-slate-100 py-1 z-50 text-xs">
-                <button @click="setStatus('on-time'); openScenario = false" 
-                        class="w-full text-left px-3 py-1.5 hover:bg-emerald-50 text-slate-700 hover:text-emerald-700 flex items-center gap-2 text-[11px] font-medium cursor-pointer">
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                    <span x-text="lang === 'id' ? 'Tepat Waktu (On Time)' : 'On Time'"></span>
-                </button>
-                <button @click="setStatus('delayed'); openScenario = false" 
-                        class="w-full text-left px-3 py-1.5 hover:bg-amber-50 text-slate-700 hover:text-amber-700 flex items-center gap-2 text-[11px] font-medium cursor-pointer">
-                    <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
-                    <span x-text="lang === 'id' ? 'Terlambat (+4j Cuaca)' : 'Delayed (+4h Weather)'"></span>
-                </button>
-                <button @click="setStatus('rebooked'); openScenario = false" 
-                        class="w-full text-left px-3 py-1.5 hover:bg-blue-50 text-slate-700 hover:text-blue-700 flex items-center gap-2 text-[11px] font-medium cursor-pointer">
-                    <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
-                    <span x-text="lang === 'id' ? 'Terjadwal Baru (Rebooked)' : 'Rebooked (New Flight)'"></span>
-                </button>
             </div>
         </div>
 
@@ -229,26 +209,15 @@
                     <p class="text-[10.5px] text-slate-500 truncate" x-text="currentUser.email"></p>
                 </div>
 
-                <!-- Scenario Switcher for Tablet / Mobile / iPad -->
+                {{-- id: Status penerbangan untuk Tablet / Mobile / iPad — hanya informasi (read-only), sama seperti pill di desktop
+                     en: Flight status for Tablet / Mobile / iPad — informational only (read-only), same as the desktop pill --}}
                 <div class="px-3.5 py-1.5 border-b border-slate-100 xl:hidden">
                     <p class="text-[10px] uppercase tracking-wider text-slate-400 font-bold mb-1"
-                       x-text="lang === 'id' ? 'Simulasi Status Flight:' : 'Simulate Flight Status:'"></p>
-                    <div class="grid grid-cols-3 gap-1 text-[10.5px]">
-                        <button @click="setStatus('on-time')" 
-                                :class="flightStatus === 'on-time' ? 'bg-emerald-50 text-emerald-700 font-bold border-emerald-300' : 'bg-slate-50 text-slate-600 border-slate-200'"
-                                class="py-1 px-1 rounded-md border text-center transition cursor-pointer"
-                                x-text="lang === 'id' ? 'Tepat Waktu' : 'On Time'">
-                        </button>
-                        <button @click="setStatus('delayed')" 
-                                :class="flightStatus === 'delayed' ? 'bg-amber-50 text-amber-700 font-bold border-amber-300' : 'bg-slate-50 text-slate-600 border-slate-200'"
-                                class="py-1 px-1 rounded-md border text-center transition cursor-pointer"
-                                x-text="lang === 'id' ? 'Terlambat' : 'Delayed'">
-                        </button>
-                        <button @click="setStatus('rebooked')" 
-                                :class="flightStatus === 'rebooked' ? 'bg-blue-50 text-blue-700 font-bold border-blue-300' : 'bg-slate-50 text-slate-600 border-slate-200'"
-                                class="py-1 px-1 rounded-md border text-center transition cursor-pointer"
-                                x-text="lang === 'id' ? 'Terjadwal' : 'Rebooked'">
-                        </button>
+                       x-text="lang === 'id' ? 'Status Penerbangan:' : 'Flight Status:'"></p>
+                    <div class="flex items-center gap-1.5 py-1 px-2 rounded-md border bg-slate-50 border-slate-200 text-[10.5px] font-semibold text-slate-700">
+                        <span class="w-1.5 h-1.5 rounded-full"
+                              :class="flightStatus === 'on-time' ? 'bg-emerald-500' : (flightStatus === 'delayed' ? 'bg-amber-500' : 'bg-blue-500')"></span>
+                        <span x-text="flightStatus === 'on-time' ? (lang === 'id' ? 'Tepat Waktu' : 'On Time') : (flightStatus === 'delayed' ? (lang === 'id' ? 'Terlambat (+4j)' : 'Delayed (+4h)') : (lang === 'id' ? 'Terjadwal Baru' : 'Rebooked'))"></span>
                     </div>
                 </div>
 
