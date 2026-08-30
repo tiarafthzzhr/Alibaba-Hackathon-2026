@@ -731,9 +731,9 @@ For endpoint details, the database schema, and demo seed data, see [Architecture
 - [ ] **Alternate-airport awareness** — surface replacement flights that land at a different airport serving the same city (e.g. SZB instead of KUL), so a passenger is never silently rerouted.
 - [ ] **Pre-booking trip planning** — deliberately out of scope for now. Searching and buying new tickets is OTA territory, and Rebound's value comes from staying focused on the post-booking phase.
 
-- #hackhaton
-- #alibabacloud
-- #atlasapi
+- **#hackhaton**
+- **#alibabacloud**
+- **#atlasapi**
 
 ## 📄 License
 
